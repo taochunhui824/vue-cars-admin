@@ -1,3 +1,11 @@
+/*
+ * @Author: taochunhui 814995688@qq.com
+ * @Date: 2022-09-03 15:32:38
+ * @LastEditors: taochunhui 814995688@qq.com
+ * @LastEditTime: 2022-09-04 09:21:35
+ * @FilePath: /vue-cars/vue-cars-admin/vue.config.js
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 const path = require('path');
 module.exports = {
     // 基本路径
@@ -53,32 +61,26 @@ module.exports = {
     pwa: {},
     // webpack-dev-server 相关配置
     devServer: {
-        // open: false, // 编译完成是否打开网页
-        // host: '0.0.0.0', // 指定使用地址，默认localhost,0.0.0.0代表可以被外界访问
-        // port: 8080, // 访问端口
-        // https: false, // 编译失败时刷新页面
-        // hot: true, // 开启热加载
-        // hotOnly: false,
-        // proxy: {
-        //     // 后端的接口：http://www.web-jshtml/api/cars   接口：/getCode/
-        //     [process.env.VUE_APP_API_LOGIN]: {
-        //         target: "http://www.web-jshtml.cn/api/cars", //API服务器的地址
-        //         changeOrigin: true,
-        //         pathRewrite: {
-        //             [`^${process.env.VUE_APP_API_LOGIN}`]: ''
-        //         }
-        //     },
-        //     // 本地开发环境请求地址：http://www.web-jshtml.cn/api/cars/getCode/
-
-        //     // 前端的接口：http://www.web-jshtml/api/cars/web
-        //     [process.env.VUE_APP_API_WEB]: {
-        //         target: process.env.VUE_API_DEV_WEB_TARGET, //API服务器的地址
-        //         changeOrigin: true,
-        //         pathRewrite: {
-        //             [`^${process.env.VUE_APP_API_WEB}`]: ''
-        //         }
-        //     }
-        // }
+        hot: true,
+        https: false,
+        port: 8080,
+        open: true,
+        proxy: {
+            // 匹配到/localApi开头时 替换成target指定的地址
+            '/devApi': {
+                // 本地
+                target: process.env.VUE_APP_SRC1,
+                secure: false, 
+                changeOrigin: process.env.NODE_ENV === 'development' ? true : false, // 开发环境才开启反向代理, 生产环境不开启
+                pathRewrite: {
+                // 把匹配到的/localApi这段开头 替换成 /
+                '^/devApi': ''
+                },
+                headers: {
+                    referer: process.env.VUE_APP_SRC1, //这里后端做了拒绝策略限制，请求头必须携带referer，否则无法访问后台
+                }
+            },
+        }
     },
     /**
      * 第三方插件配置
