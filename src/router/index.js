@@ -2,7 +2,7 @@
  * @Author: taochunhui 814995688@qq.com
  * @Date: 2022-09-03 15:30:48
  * @LastEditors: taochunhui 814995688@qq.com
- * @LastEditTime: 2022-09-04 23:12:14
+ * @LastEditTime: 2022-09-07 21:10:39
  * @FilePath: /vue-cars/vue-cars-admin/src/router/index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -30,7 +30,7 @@ const routes = [
         meta: {
             title: "控制台",
             icon: "console",
-            iconClass: "icon_console",
+            iconClass: "Service",
         },
         component: Layout,
         children: [
@@ -51,7 +51,7 @@ const routes = [
         meta: {
             title: "信息管理",
             icon: "console",
-            iconClass: "icon_console",
+            iconClass: "ChatDotSquare",
         },
         component: Layout,
         children: [
@@ -80,7 +80,7 @@ const routes = [
         meta: {
             title: "用户管理",
             icon: "console",
-            iconClass: "icon_console",
+            iconClass: "User",
         },
         component: Layout,
         children: [
@@ -101,5 +101,15 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes,
 });
+
+//路由守卫，跳转前获取token，存在即跳转，否则就返回重新登陆
+router.beforeEach((to, from, next) => {
+    const token = localStorage.getItem('token')
+    if(!token && to.path !== '/login') {
+        next('/login')
+    } else {
+        next()
+    }
+})
 
 export default router;

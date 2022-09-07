@@ -2,7 +2,7 @@
 * @Author: taochunhui 814995688@qq.com
 * @Date: 2022-09-03 15:47:01
  * @LastEditors: taochunhui 814995688@qq.com
- * @LastEditTime: 2022-09-04 21:07:03
+ * @LastEditTime: 2022-09-07 21:07:25
 * @FilePath: /vue-cars/vue-cars-admin/src/views/Login/index.vue
 * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -54,6 +54,7 @@
 </template>
     
 <script>
+import sha1 from 'js-sha1'
 import { defineComponent, reactive, ref, unref } from "vue";
 import { validate_email, validate_password } from "@/utils/validate";
 import { GetSms, Register, Login } from '@/api/login'
@@ -235,7 +236,7 @@ export default defineComponent({
         const register = ()=> {
             let registerData = {
                 username: form.name,
-                password: form.password,
+                password: sha1(form.password),
                 code: form.code
             }
             Register(registerData).then((res) => {
@@ -244,6 +245,7 @@ export default defineComponent({
                     type: 'success',
                     message: res.message
                 })
+                toggleMenu('login')
             }).catch(error => {
                 console.log(error)
             })
@@ -253,7 +255,7 @@ export default defineComponent({
         const login = ()=> {
             let loginData = {
                 username: form.name,
-                password: form.password,
+                password: sha1(form.password),
                 code: form.code
             }
             Login(loginData).then((res) => {
@@ -262,8 +264,10 @@ export default defineComponent({
                     type: 'success',
                     message: res.message
                 })
+                // 将token进行保存
+                localStorage.setItem("token", res.data.token)
                 //登陆成功页面跳转
-                router.push('/layout')
+                router.push('/home')
             }).catch(error => {
                 console.log(error)
             })
