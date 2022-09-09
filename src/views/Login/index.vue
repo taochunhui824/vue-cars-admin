@@ -2,7 +2,7 @@
 * @Author: taochunhui 814995688@qq.com
 * @Date: 2022-09-03 15:47:01
  * @LastEditors: taochunhui 814995688@qq.com
- * @LastEditTime: 2022-09-07 21:07:25
+ * @LastEditTime: 2022-09-09 22:03:22
 * @FilePath: /vue-cars/vue-cars-admin/src/views/Login/index.vue
 * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -30,7 +30,7 @@
                     <el-input type="password" v-model="form.passwords"></el-input>
                 </el-form-item>
                 <el-form-item prop="code">
-                    <div>
+                    <div style="width: 100%;">
                         <label class="form-label">验证码</label>
                         <el-row :gutter="10">
                             <el-col :span="14">
@@ -59,7 +59,8 @@ import { defineComponent, reactive, ref, unref } from "vue";
 import { validate_email, validate_password } from "@/utils/validate";
 import { GetSms, Register, Login } from '@/api/login'
 import { ElMessage } from 'element-plus'
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex'
 export default defineComponent({
     setup (props, context) {
         const menu_switch_item = reactive([
@@ -84,6 +85,7 @@ export default defineComponent({
         let timer = ref(null);
         let submit_disabled = ref(true);//登陆按钮禁用状态
         const router = useRouter()
+        const store = useStore()
 
         /**
          * 自定义检验规则
@@ -266,6 +268,10 @@ export default defineComponent({
                 })
                 // 将token进行保存
                 localStorage.setItem("token", res.data.token)
+                localStorage.setItem("username", res.data.username)
+                // 将token，user存储到vuex中
+                store.commit('nav/setToken', res.data.token)
+                store.commit('nav/setUsername', res.data.username)
                 //登陆成功页面跳转
                 router.push('/home')
             }).catch(error => {
