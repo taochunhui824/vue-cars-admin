@@ -2,12 +2,12 @@
  * @Author: taochunhui 814995688@qq.com
  * @Date: 2022-09-04 15:10:56
  * @LastEditors: taochunhui 814995688@qq.com
- * @LastEditTime: 2022-09-04 16:29:22
+ * @LastEditTime: 2022-09-09 21:06:31
  * @FilePath: /vue-cars/vue-cars-admin/src/views/Layout/index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-    <div id="layout-wrap" class="common-layout">
+    <div id="layout-wrap" :class="[menuStatus ? 'common-layout close' : 'open common-layout']">
         <el-container>
             <el-aside>
                 <LayoutNav />
@@ -25,7 +25,8 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
+import { useStore } from 'vuex'
 import LayoutHeader from './Components/Header.vue'
 import LayoutMain from './Components/Main.vue'
 import LayoutNav from './Components/Nav.vue'
@@ -36,9 +37,13 @@ export default defineComponent({
         LayoutNav
     },
     setup () {
+        const store = useStore()
 
+        const menuStatus = computed(()=> store.state.nav.isCollapse)
 
-        return {}
+        return {
+            menuStatus
+        }
     }
 })
 </script>
@@ -58,9 +63,11 @@ export default defineComponent({
     }
 
     .el-aside {
-        background-color: #D3DCE6;
+        background-color: #344a5f;
         color: #333;
         width: $navMenu;
+        height: 100vh;
+        @include webkitA(transition, all .3s ease);
     }
 
     .el-main {
@@ -72,5 +79,15 @@ export default defineComponent({
         margin-bottom: 40px;
     }
 
+}
+.open {
+    .el-aside {
+        width: $navMenu;
+    }
+}
+.close {
+    .el-aside {
+        width: $navMenuStatus !important;
+    }
 }
 </style>

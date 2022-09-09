@@ -2,19 +2,19 @@
  * @Author: taochunhui 814995688@qq.com
  * @Date: 2022-09-04 15:13:23
  * @LastEditors: taochunhui 814995688@qq.com
- * @LastEditTime: 2022-09-07 22:01:22
+ * @LastEditTime: 2022-09-09 22:24:51
  * @FilePath: /vue-cars/vue-cars-admin/src/views/Layout/Components/Header.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
     <div id="header-wrap">
-        <el-icon :size="30">
+        <el-icon :size="30" @click="navMenuSate">
             <Operation />
         </el-icon>
         <div class="header-box">
             <div class="header-box-user">
                 <img src="../../../assets/logo.png">
-                <span>管理员</span>
+                <span>{{ username }}</span>
             </div>
             <el-icon :size="30" @click="delToken">
                 <SwitchButton />
@@ -24,20 +24,40 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
-import { useRouter, useRoute } from 'vue-router';
+import { defineComponent, computed } from 'vue'
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex'
+import { ElMessage } from 'element-plus'
 export default defineComponent({
     setup () {
         
         const router = useRouter()
+        const store = useStore()
 
+        //退出删除token
         const delToken = ()=>{
             localStorage.removeItem('token')
+            localStorage.removeItem('username')
+            store.commit('nav/setToken', '')
+            store.commit('nav/setUsername', '')
+            ElMessage({
+                type: 'success',
+                message: '退出成功'
+            })
             router.push('/login')
         }
 
+        const navMenuSate = ()=> {
+            store.commit('nav/setIsCollapse')
+        }
+
+        //监听用户名
+        const username = computed(()=> store.state.nav.username)
+
         return {
-            delToken
+            delToken,
+            navMenuSate,
+            username
         }
     }
 })
