@@ -9,3 +9,38 @@
 .aic {
     align-items: center;
 }
+
+.jcfe {
+    justify-content: flex-end;
+}
+
+.jcsp {
+    justify-content: space-between;
+}
+
+.pl10 {
+    padding-left: 10px;
+}
+
+.ml10 {
+    margin-left: 10px;
+}
+
+.mt20 {
+    margin-top: 20px;
+}
+
+.header {
+    padding: 5px 10px;
+    @include webkit(box-shadow, 0 3px 16px 0 rgba(0, 0, 0, .1));
+    .lable {
+        white-space: nowrap;
+        font-size: 14px;
+        font-weight: 400;
+        padding-right: 10px;
+    }
+}
+
+.container {
+    margin-top: 10px;
+}
