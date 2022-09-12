@@ -2,7 +2,7 @@
  * @Author: taochunhui 814995688@qq.com
  * @Date: 2022-09-03 19:56:48
  * @LastEditors: taochunhui 814995688@qq.com
- * @LastEditTime: 2022-09-07 20:59:47
+ * @LastEditTime: 2022-09-10 20:22:27
  * @FilePath: /vue-cars/vue-cars-admin/src/utils/request.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -21,6 +21,8 @@ const service = axios.create({
 service.interceptors.request.use((config)=>{
     //在发送请求前做些什么
     config.headers['Content-Type'] = 'application/json; charset=UTF-8'
+    config.headers['ToKen'] = localStorage.getItem('token')
+    config.headers['UserName'] = localStorage.getItem('username')
     return config
 })
 //响应拦截-请求接口后，返回数据进行拦截
